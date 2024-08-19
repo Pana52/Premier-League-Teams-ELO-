@@ -1,0 +1,142 @@
+/* General styling */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+header {
+    background-color: #444;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+}
+
+nav ul {
+    background-color: #333;
+    overflow: hidden;
+    color: #fff;
+    padding: 0;
+    text-align: center;
+    margin: 0;
+    list-style: none;
+}
+
+nav ul li {
+    display: inline;
+    padding: 10px 20px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+nav ul li a:hover {
+    background-color: #555;
+    transition: background-color 0.3s;
+}
+
+section {
+    margin: 20px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden; /* To contain any overflowing content */
+}
+
+#teamList {
+    margin-top: 20px;
+}
+
+.teamBox {
+    background-color: #efefef;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s, transform 0.3s;
+    width: 100%;
+}
+
+.teamBox:hover {
+    background-color: #ddd;
+    transform: scale(1.02);
+}
+
+.teamBox h3 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.teamContent {
+    padding: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-top: 10px;
+    max-height: 400px; /* Set max-height to limit the size */
+    overflow-y: auto; /* Enable vertical scrolling */
+    position: relative;
+    animation: expand 0.5s ease-in-out;
+}
+
+/* Table styling */
+table {
+    width: 100%; /* Ensure table takes up the full width of its container */
+    border-collapse: collapse;
+    table-layout: fixed; /* Prevent columns from expanding too much */
+    margin-top: 10px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 8px;
+    text-align: center;
+    word-wrap: break-word; /* Break long words onto the next line */
+}
+
+th {
+    background-color: #f4f4f4;
+}
+
+/* Responsive table container for horizontal scrolling */
+#eloTableContainer {
+    max-height: 400px; /* Limit the height of the table container */
+    overflow-y: auto; /* Enable vertical scrolling within the table */
+    overflow-x: auto; /* Enable horizontal scrolling if the table is too wide */
+}
+
+#teamSearch {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+#resetButton {
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    background-color: #444;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#resetButton:hover {
+    background-color: #555;
+}

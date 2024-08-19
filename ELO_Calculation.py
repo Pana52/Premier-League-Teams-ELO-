@@ -108,25 +108,31 @@ def end_of_season_update(current_season):
 for season in data['Season_End_Year'].unique():
     end_of_season_update(season)
 
-# Save the master ELO log to an Excel file
-output_file = 'ELO_Ratings_Log.xlsx'
-with pd.ExcelWriter(output_file) as writer:
-    elo_log.to_excel(writer, sheet_name='ELO Log', index=False)
+# Save the master ELO log to a CSV file
+output_file = 'ELO_Ratings_Log.csv'
+elo_log.to_csv(output_file, index=False)
 
-# Create separate Excel files for each team with only the required columns
+# Create separate CSV files for each team with only the required columns
 teams = elo_log['Home_Team'].unique()
-output_directory = 'Team_ELO_Logs'
+output_directory = 'page\Team_ELO_Logs'
 os.makedirs(output_directory, exist_ok=True)
 
 for team in teams:
-    team_log = elo_log[(elo_log['Home_Team'] == team) | (elo_log['Away_Team'] == team)][['Date', 'Season_End_Year', 'Week', 'Home_Team', 'Away_Team', 'Home_ELO_New', 'Away_ELO_New']]
-    team_log = team_log.rename(columns={'Home_ELO_New': 'Home_Current_ELO', 'Away_ELO_New': 'Away_Current_ELO'})  # Rename column for clarity
-    team_file = os.path.join(output_directory, f'{team}_ELO_Log.xlsx')
-    with pd.ExcelWriter(team_file) as writer:
-        team_log.to_excel(writer, sheet_name=f'{team} ELO Log', index=False)
+    team_log_home = elo_log[elo_log['Home_Team'] == team][['Date', 'Season_End_Year', 'Week', 'Home_ELO_New']]
+    team_log_away = elo_log[elo_log['Away_Team'] == team][['Date', 'Season_End_Year', 'Week', 'Away_ELO_New']]
+
+    # Rename ELO column to a uniform name
+    team_log_home = team_log_home.rename(columns={'Home_ELO_New': 'ELO'})
+    team_log_away = team_log_away.rename(columns={'Away_ELO_New': 'ELO'})
+
+    # Concatenate home and away logs
+    team_log = pd.concat([team_log_home, team_log_away]).sort_values(by=['Season_End_Year', 'Week', 'Date'])
+
+    team_file = os.path.join(output_directory, f'{team}_ELO_Log.csv')
+    team_log.to_csv(team_file, index=False)
 
 print(f"ELO ratings changes have been saved to {output_file}")
-print(f"Separate ELO logs for each team have been saved in the '{output_directory}' directory.")
+print(f"Separate ELO logs for each team have been saved as CSV files in the '{output_directory}' directory.")
 
 # Display final ELO ratings
 final_elo_df = pd.DataFrame.from_dict(elo_ratings, orient='index', columns=['Final ELO Rating'])
