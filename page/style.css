@@ -1,4 +1,5 @@
 /* General styling */
+/*===============================================================================================*/
 body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
@@ -49,7 +50,10 @@ section {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     overflow: hidden; /* To contain any overflowing content */
 }
+/*===============================================================================================*/
 
+/*Team Section*/
+/*===============================================================================================*/
 #teamList {
     margin-top: 20px;
 }
@@ -77,18 +81,72 @@ section {
 }
 
 .teamContent {
-    padding: 15px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    margin-top: 10px;
-    max-height: 400px; /* Set max-height to limit the size */
-    overflow-y: auto; /* Enable vertical scrolling */
-    position: relative;
-    animation: expand 0.5s ease-in-out;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%; /* Ensure the content takes up the full width */
 }
 
+.logoContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    height: 100%; /* Set the fixed height for the logo */
+    border-radius: 10px; /* Rounded corners */
+    background-color: #f4f4f4; /* Background color for the logo div */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional shadow */
+}
+
+.logoContainer img {
+    max-height: 256px;
+    max-width: 256px;
+    object-fit: contain; /* Preserve aspect ratio */
+}
+
+.graphContainer {
+    width: 50%; /* Take up the remaining 50% of the container */
+    height: 100%; /* Ensure it takes the full height */
+}
+
+
+.teamContent svg {
+    margin-right: 0; /* Ensure there's no extra margin on the right side */
+    margin-left: auto; /* Push the SVG to the right */
+}
+
+
+/*Search Querries*/
+/*===============================================================================================*/
+#teamSearch {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+#resetButton {
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    background-color: #444;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#resetButton:hover {
+    background-color: #555;
+}
+/*===============================================================================================*/
+
+/*===============================================================================================*/
+
 /* Table styling */
+/*===============================================================================================*/
 table {
     width: 100%; /* Ensure table takes up the full width of its container */
     border-collapse: collapse;
@@ -116,27 +174,6 @@ th {
     overflow-y: auto; /* Enable vertical scrolling within the table */
     overflow-x: auto; /* Enable horizontal scrolling if the table is too wide */
 }
+/*===============================================================================================*/
 
-#teamSearch {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 16px;
-}
 
-#resetButton {
-    padding: 10px 20px;
-    margin-bottom: 20px;
-    background-color: #444;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-#resetButton:hover {
-    background-color: #555;
-}
