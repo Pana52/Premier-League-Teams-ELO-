@@ -1,0 +1,48 @@
+/* Container for the table */
+.elo-table-container {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  /* Table Wrapper to enable scrolling */
+  .table-wrapper {
+    max-height: 400px; /* Adjust the height as necessary */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 1px solid #ccc;
+    margin: 0 auto;
+    width: 90%;
+  }
+  
+  /* Table styling */
+  .elo-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .elo-table th, .elo-table td {
+    padding: 8px;
+    text-align: center;
+    border: 1px solid #ccc;
+  }
+  
+  .elo-table th {
+    background-color: #f0f0f0;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  
+  /* Scrollbar customization (optional) */
+  .table-wrapper::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  .table-wrapper::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 10px;
+  }
+  
+  .table-wrapper::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+  }
+  

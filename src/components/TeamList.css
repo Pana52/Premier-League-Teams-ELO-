@@ -1,0 +1,94 @@
+/* TeamList Container */
+#teamList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-top: 20px;
+  }
+  
+  /* Team Box */
+  .teamBox {
+    background-color: #efefef;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s, transform 0.3s;
+    width: 100%;
+}
+  
+.teamBox:hover {
+    background-color: #ddd;
+    transform: scale(1.02);
+}
+
+.teamBox h3 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.teamContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%; /* Ensure the content takes up the full width */
+}
+  
+  /* Logo Container */
+  .logoContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    height: 100%; /* Set the fixed height for the logo */
+    border-radius: 10px; /* Rounded corners */
+    background-color: #f4f4f4; /* Background color for the logo div */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional shadow */
+}
+  
+.logoContainer img {
+    max-height: 256px;
+    max-width: 256px;
+    object-fit: contain; /* Preserve aspect ratio */
+}
+
+.graphContainer {
+    width: 50%; /* Take up the remaining 50% of the container */
+    height: 100%; /* Ensure it takes the full height */
+}
+  
+  /* Search Bar */
+  #teamSearch {
+    padding: 8px;
+    font-size: 16px;
+    width: 60%;
+    margin: 20px auto;
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  /* Reset Button */
+  button {
+    padding: 8px 16px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  
+  /* Hover Text for Graph */
+  .focus .hover-text {
+    font-size: 12px;
+    fill: #333;
+  }
+  
