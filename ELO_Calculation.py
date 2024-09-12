@@ -1,21 +1,19 @@
 import pandas as pd
-import os
 
-# Constants (Free to play with)
+# Constants
 K_base = 50
-alpha = 3
-initial_elo = 1000
+alpha = 5
+initial_elo = 500
 
 # Load the dataset
-data = pd.read_csv('D:\Premier-League-Teams-ELO-\dataset\premier-league-matches.csv')
+data = pd.read_csv('D:/Premier-League-Teams-ELO-/dataset/premier-league-matches.csv')
 
 # Initialize the ELO ratings
 elo_ratings = {}
 
 # Initialize a DataFrame to track ELO changes
-columns = ['Season_End_Year', 'Week', 'Date', 'Home_Team', 'Away_Team', 'Result',
-           'Home_ELO_Old', 'Home_ELO_New', 'Home_ELO_Change',
-           'Away_ELO_Old', 'Away_ELO_New', 'Away_ELO_Change']
+columns = ['Season_End_Year', 'Week', 'Date', 'Home_ELO_New', 'Home_ELO_Change', 'Home_Team', 'HomeGoals', 'AwayGoals',
+           'Away_Team', 'Away_ELO_New', 'Away_ELO_Change']
 elo_log = pd.DataFrame(columns=columns)
 
 # Function to initialize or reset a team's ELO rating
@@ -48,15 +46,12 @@ def update_elo_log(season, week, date, home_team, away_team, home_goals, away_go
     if home_goals > away_goals:
         S_home = 1
         S_away = 0
-        result = 'H'
     elif home_goals < away_goals:
         S_home = 0
         S_away = 1
-        result = 'A'
     else:
         S_home = 0.5
         S_away = 0.5
-        result = 'D'
 
     # Calculate K-factors
     K_home = calculate_k_factor(R_home, R_away)
@@ -66,11 +61,16 @@ def update_elo_log(season, week, date, home_team, away_team, home_goals, away_go
     new_R_home = R_home + K_home * (S_home - E_home)
     new_R_away = R_away + K_away * (S_away - E_away)
 
-    # Log ELO changes
+    # Round the ELO values and changes to integers
+    new_R_home = round(new_R_home)
+    new_R_away = round(new_R_away)
+    home_elo_change = round(new_R_home - R_home)
+    away_elo_change = round(new_R_away - R_away)
+
+    # Log ELO changes along with goals scored
     elo_log.loc[len(elo_log)] = [
-        season, week, date, home_team, away_team, result,
-        R_home, new_R_home, new_R_home - R_home,
-        R_away, new_R_away, new_R_away - R_away
+        season, week, date, new_R_home, home_elo_change, home_team, home_goals, away_goals,
+        away_team, new_R_away, away_elo_change
     ]
 
     # Apply the new ratings
@@ -109,35 +109,13 @@ for season in data['Season_End_Year'].unique():
     end_of_season_update(season)
 
 # Save the master ELO log to a CSV file
-output_file = 'ELO_Ratings_Log.csv'
+output_file = 'public/ELO_Ratings_Log.csv'
 elo_log.to_csv(output_file, index=False)
 
-# Create separate CSV files for each team with only the required columns
-teams = elo_log['Home_Team'].unique()
-output_directory = 'page\Team_ELO_Logs'
-os.makedirs(output_directory, exist_ok=True)
-
-for team in teams:
-    team_log_home = elo_log[elo_log['Home_Team'] == team][['Date', 'Season_End_Year', 'Week', 'Home_ELO_New']]
-    team_log_away = elo_log[elo_log['Away_Team'] == team][['Date', 'Season_End_Year', 'Week', 'Away_ELO_New']]
-
-    # Rename ELO column to a uniform name
-    team_log_home = team_log_home.rename(columns={'Home_ELO_New': 'ELO'})
-    team_log_away = team_log_away.rename(columns={'Away_ELO_New': 'ELO'})
-
-    # Concatenate home and away logs
-    team_log = pd.concat([team_log_home, team_log_away]).sort_values(by=['Season_End_Year', 'Week', 'Date'])
-
-    team_file = os.path.join(output_directory, f'{team}_ELO_Log.csv')
-    team_log.to_csv(team_file, index=False)
-
 print(f"ELO ratings changes have been saved to {output_file}")
-print(f"Separate ELO logs for each team have been saved as CSV files in the '{output_directory}' directory.")
 
-# Display final ELO ratings
+# Optional: Display final ELO ratings
 final_elo_df = pd.DataFrame.from_dict(elo_ratings, orient='index', columns=['Final ELO Rating'])
 final_elo_df = final_elo_df.sort_values(by='Final ELO Rating', ascending=False)
-
-# Print final ELO ratings
 print("Final ELO Ratings:")
 print(final_elo_df)

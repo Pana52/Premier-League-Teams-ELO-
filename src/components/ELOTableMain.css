@@ -1,48 +1,134 @@
 /* Container for the table */
 .elo-table-container {
-    margin-top: 20px;
-    text-align: center;
-  }
-  
-  /* Table Wrapper to enable scrolling */
-  .table-wrapper {
-    max-height: 400px; /* Adjust the height as necessary */
-    overflow-y: auto; /* Enable vertical scrolling */
-    border: 1px solid #ccc;
-    margin: 0 auto;
-    width: 90%;
-  }
-  
-  /* Table styling */
-  .elo-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .elo-table th, .elo-table td {
-    padding: 8px;
-    text-align: center;
-    border: 1px solid #ccc;
-  }
-  
-  .elo-table th {
-    background-color: #f0f0f0;
-    position: sticky;
-    top: 0;
-    z-index: 1;
-  }
-  
-  /* Scrollbar customization (optional) */
-  .table-wrapper::-webkit-scrollbar {
-    width: 10px;
-  }
-  
-  .table-wrapper::-webkit-scrollbar-thumb {
-    background-color: #888;
-    border-radius: 10px;
-  }
-  
-  .table-wrapper::-webkit-scrollbar-thumb:hover {
-    background-color: #555;
-  }
-  
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* Table Wrapper to enable scrolling */
+.table-wrapper {
+  max-height: 400px;
+  overflow-y: auto; /* Enable vertical scrolling */
+  border: 1px solid #ccc;
+  margin: 0 auto;
+  width: 90%;
+}
+
+/* Season Button */
+.season-button {
+  margin: 10px 0;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.season-button:hover {
+  background-color: #0056b3;
+}
+
+/* Week Section */
+.week-section {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #f9f9f9;
+}
+
+.week-section h3 {
+  margin: 0;
+  padding: 10px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+/* Match Row Grid Layout */
+.match-row {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  align-items: center;
+  justify-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+/* Team Info (logo + name) */
+.team-info {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.team-info img {
+  width: 32px;
+  height: 32px;
+  margin-right: 10px;
+}
+
+.team-info.away {
+  justify-content: flex-end;
+}
+
+.team-info.away img {
+  margin-right: 0;
+  margin-left: 10px;
+}
+
+/* ELO Change Styling */
+.elo-change {
+  padding: 5px;
+  font-weight: bold;
+  text-align: center;
+  width: 100%;
+}
+
+.elo-change.green {
+  background-color: green;
+  color: white;
+}
+
+.elo-change.red {
+  background-color: red;
+  color: white;
+}
+
+.elo-change.yellow {
+  background-color: yellow;
+  color: black;
+}
+
+/* Goals Styling */
+.goals {
+  font-weight: bold;
+  text-align: center;
+  width: 100%;
+}
+
+.goals.green {
+  background-color: green;
+  color: white;
+}
+
+.goals.red {
+  background-color: red;
+  color: white;
+}
+
+.goals.yellow {
+  background-color: yellow;
+  color: black;
+}
+
+/* ELO Value Styling */
+.elo-value {
+  text-align: center;
+  width: 100%;
+}
+
+/* Match Date Styling */
+.match-date {
+  text-align: center;
+  width: 100%;
+}
