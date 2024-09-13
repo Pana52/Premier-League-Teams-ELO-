@@ -1,11 +1,19 @@
 /* General styling */
 /*===============================================================================================*/
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Oswald", sans-serif;
+    color: black;
+}
+
+p {
+    font-family: "Merriweather Sans", sans-serif;
+}
+
 body {
-    font-family: Arial, sans-serif;
     line-height: 1.6;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background: linear-gradient(black, white, black);
     color: #333;
 }
 
@@ -78,38 +86,3 @@ section {
     background-color: #555;
 }
 /*===============================================================================================*/
-
-/*===============================================================================================*/
-
-/* Table styling */
-/*===============================================================================================*/
-table {
-    width: 100%; /* Ensure table takes up the full width of its container */
-    border-collapse: collapse;
-    table-layout: fixed; /* Prevent columns from expanding too much */
-    margin-top: 10px;
-}
-
-table, th, td {
-    border: 1px solid #ddd;
-}
-
-th, td {
-    padding: 8px;
-    text-align: center;
-    word-wrap: break-word; /* Break long words onto the next line */
-}
-
-th {
-    background-color: #f4f4f4;
-}
-
-/* Responsive table container for horizontal scrolling */
-#eloTableContainer {
-    max-height: 400px; /* Limit the height of the table container */
-    overflow-y: auto; /* Enable vertical scrolling within the table */
-    overflow-x: auto; /* Enable horizontal scrolling if the table is too wide */
-}
-/*===============================================================================================*/
-
-

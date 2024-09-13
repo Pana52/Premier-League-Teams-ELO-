@@ -82,21 +82,23 @@ const MatchRow = ({ match }) => {
   return (
     <div className="match-row">
       {/* Home Team ELO Change */}
-      <div className={`elo-change ${getColorForEloChange(match.Home_ELO_Change)}`}>
+      <div className={`elo-change-home ${getColorForEloChange(match.Home_ELO_Change)}`}>
         {match.Home_ELO_Change}
       </div>
 
       {/* Home Team ELO */}
-      <div className="elo-value">{match.Home_ELO_New}</div>
+      <div className="elo-value-home">{match.Home_ELO_New}</div>
 
-      {/* Home Team Logo and Name */}
-      <div className="team-info">
+      {/* Home Team Logo */}
+      <div className="logo-home">
         <img src={`/Teams Logos/${match.Home_Team}_Logo.svg`} alt={`${match.Home_Team} Logo`} />
-        <span>{match.Home_Team}</span>
       </div>
 
+      {/* Home Team Name */}
+      <div className="team-name-home">{match.Home_Team}</div>
+
       {/* Home Team Goals */}
-      <div className={`goals ${getColorForGoals(match.HomeGoals, match.AwayGoals)}`}>
+      <div className={`goals-home ${getColorForGoals(match.HomeGoals, match.AwayGoals)}`}>
         {match.HomeGoals}
       </div>
 
@@ -104,21 +106,23 @@ const MatchRow = ({ match }) => {
       <div className="match-date">{match.Date}</div>
 
       {/* Away Team Goals */}
-      <div className={`goals ${getColorForGoals(match.AwayGoals, match.HomeGoals)}`}>
+      <div className={`goals-away ${getColorForGoals(match.AwayGoals, match.HomeGoals)}`}>
         {match.AwayGoals}
       </div>
 
-      {/* Away Team Logo and Name */}
-      <div className="team-info away">
-        <span>{match.Away_Team}</span>
+      {/* Away Team Name */}
+      <div className="team-name-away">{match.Away_Team}</div>
+
+      {/* Away Team Logo */}
+      <div className="logo-away">
         <img src={`/Teams Logos/${match.Away_Team}_Logo.svg`} alt={`${match.Away_Team} Logo`} />
       </div>
 
       {/* Away Team ELO */}
-      <div className="elo-value">{match.Away_ELO_New}</div>
+      <div className="elo-value-away">{match.Away_ELO_New}</div>
 
       {/* Away Team ELO Change */}
-      <div className={`elo-change ${getColorForEloChange(match.Away_ELO_Change)}`}>
+      <div className={`elo-change-away ${getColorForEloChange(match.Away_ELO_Change)}`}>
         {match.Away_ELO_Change}
       </div>
     </div>

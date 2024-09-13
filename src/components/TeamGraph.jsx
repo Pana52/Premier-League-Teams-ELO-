@@ -56,7 +56,7 @@ const TeamGraph = ({ team }) => {
     const x = d3.scaleLinear().domain([1, d3.max(data, (d) => d.Week)]).range([0, width]);
 
     // Y-axis for ELO
-    const y = d3.scaleLinear().domain([0, 2000]).range([height, 0]);
+    const y = d3.scaleLinear().domain([0, 1200]).range([height, 0]);
 
     // Draw axes
     svg.append('g').attr('transform', `translate(0,${height})`).call(d3.axisBottom(x));
