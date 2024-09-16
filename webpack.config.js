@@ -2,10 +2,11 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
 module.exports = {
-  entry: './src/index.js',
+  entry: './src/index.js',  // Ensure the correct entry point for React
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'client/build'),  // Set to client/build
     filename: 'bundle.js',
+    publicPath: '/',  // Ensure routing works with React Router
   },
   module: {
     rules: [
@@ -27,14 +28,23 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './public/index.html', // This ensures Webpack uses the correct index.html
+      template: './public/index.html',  // Ensure this points to your HTML template
     }),
   ],
   devServer: {
     static: {
-      directory: path.join(__dirname, 'public'), // Serve static files from the public directory
+      directory: path.join(__dirname, 'public'),
     },
     compress: true,
     port: 9000,
+    historyApiFallback: true,  // Required for React Router
+    proxy: [
+      {
+        context: ['/api'],  // Define the context for which the proxy should apply
+        target: 'http://localhost:3000',  // Your Express server
+        secure: false,  // Set to false to allow self-signed certificates
+        changeOrigin: true,  // Needed for virtual hosted sites
+      },
+    ],
   },
 };

@@ -7,8 +7,6 @@
 
 /* Table Wrapper to enable scrolling */
 .table-wrapper {
-  max-height: 1000px;
-  overflow-y: auto; /* Enable vertical scrolling */
   border: 1px solid #ccc;
   margin: 0 auto;
   width: 100%;
@@ -31,17 +29,10 @@
   background-color: #0056b3;
 }
 
-/* Week Section */
-.week-section {
-  margin: 10px 0;
-  padding: 10px;
-  background-color: #f9f9f9;
-}
-
 .week-section h3 {
   margin: 0;
+  font-size: 48px;
   padding: 10px 0;
-  border-bottom: 1px solid #11151c;
 }
 
 /* Match Row Grid Layout */
@@ -225,4 +216,190 @@
   -webkit-text-stroke-color: rgb(64, 64, 64);
   text-align: center;
   width: 100%;
+}
+
+/* Season buttons as squares */
+.season-square {
+  width: 300px;
+  height: 300px;
+  color: rgb(0, 0, 0);
+  margin: 10px;
+  font-size: 64px;
+  display: inline-block;
+  cursor: pointer;
+  position: relative;
+  perspective: 1000px; /* Define the 3D perspective for the parallax effect */
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.season-square-content {
+  transition: transform 0.1s ease-out; /* Smooth transition for dynamic effect */
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.season-square:hover {
+  box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.5); /* Increase shadow for depth */
+  /* No need to add background or transform here, dynamic style will handle that */
+}
+
+/* Conveyor belt container */
+.conveyor-container {
+  width: 100%;
+  overflow: hidden; /* Hide overflow */
+  white-space: nowrap; /* Keep items in a single row */
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 20px 0;
+  margin: 0;
+}
+
+/* Conveyor track with padding to allow scrolling to the first and last buttons */
+.conveyor-track {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 40vw; /* Add enough padding so that the first button can be centered */
+  padding-right: 40vw; /* Add enough padding so that the last button can be centered */
+  transition: transform 0.3s ease-in-out;
+  will-change: transform;
+}
+
+
+/* Hover area to scroll right */
+.scroll-right {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 50px;
+  height: 100%;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5));
+  cursor: pointer;
+  z-index: 1;
+}
+
+/* Hover area to scroll left */
+.scroll-left {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50px;
+  height: 100%;
+  background: linear-gradient(to left, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5));
+  cursor: pointer;
+  z-index: 1;
+}
+
+/* Style for the season buttons in the conveyor */
+.conveyor-item {
+  display: inline-block;
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+  opacity: 0.5;
+  transform: scale(0.8);
+  perspective: 1000px;
+}
+
+/* Center item is in focus */
+.conveyor-item.focus {
+  transform: scale(1.2);
+  opacity: 1;
+}
+
+/* Hover effect for the focus item */
+.conveyor-item.focus:hover {
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* Slide-up section */
+.slide-up-section {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(#1768AC, white, #1768AC);
+  max-height: 80vh;
+  overflow-y: scroll;
+  animation: slideUp 0.5s ease-in-out;
+  z-index: 2;
+}
+
+/* Close button */
+.close-button {
+  position: absolute;
+  width: 100%; /* Automatically adjust to the button content */
+  padding: 0;
+  right: 0; /* Align to the right */
+  top: 0; /* Align to the top */
+  margin-top: 0;
+  font-size: 24px;
+  background-color: #1768AC;
+  border: 1px solid black;
+  color: #000000;
+  cursor: pointer; /* Add cursor pointer to enhance UX */
+  border-radius: 0; /* Remove rounded corners */
+}
+
+.close-button:hover {
+  color: #ff0000;
+  background-color: #DAE3E5;
+}
+
+/* Game week buttons */
+.game-week-buttons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.week-button {
+  margin: 5px;
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.week-button:hover {
+  background-color: #0056b3;
+}
+
+/* Animation for the slide-up effect */
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Styling the matches area inside the sliding section */
+.matches-by-week {
+  margin: 20px 0;
+}
+
+.week-section {
+  margin-bottom: 20px;
+}
+
+/* Glass Buttons*/
+.glass {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border:1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }

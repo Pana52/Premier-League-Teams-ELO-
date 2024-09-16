@@ -1,24 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import * as d3 from 'd3';
-import './ELOTableMain.css'; // Add a CSS file for scrollable table styling
+import './ELOTableMain.css';
 
 const ELOTableMain = () => {
-  const [eloData, setEloData] = useState([]); // State to store CSV data
-  const [selectedSeason, setSelectedSeason] = useState(null); // State for the selected season
+  const [eloData, setEloData] = useState([]);
+  const [selectedSeason, setSelectedSeason] = useState(null);
+  const [focusedIndex, setFocusedIndex] = useState(null); // Track the focused button
+  const conveyorRef = useRef(null); // Ref for the conveyor belt
+  const isDragging = useRef(false); // Track whether dragging is happening
+  const startX = useRef(0); // Store the starting X position of the mouse when dragging starts
+  const scrollLeft = useRef(0); // Store the initial scroll position when dragging starts
 
-  // Fetch and parse CSV data on component mount
   useEffect(() => {
-    fetch('/ELO_Ratings_Log.csv') // Ensure this path is correct
+    fetch('/ELO_Ratings_Log.csv')
       .then((response) => response.text())
       .then((data) => {
         const parsedData = d3.csvParse(data, (d) => ({
           ...d,
-          // Convert ELO values to numbers and round them
           Home_ELO_New: Math.round(+d.Home_ELO_New),
           Home_ELO_Change: Math.round(+d.Home_ELO_Change),
           Away_ELO_New: Math.round(+d.Away_ELO_New),
           Away_ELO_Change: Math.round(+d.Away_ELO_Change),
-          HomeGoals: +d.HomeGoals, // Ensure goals are treated as numbers
+          HomeGoals: +d.HomeGoals,
           AwayGoals: +d.AwayGoals,
         }));
         setEloData(parsedData);
@@ -26,41 +29,137 @@ const ELOTableMain = () => {
       .catch((error) => console.error('Error loading ELO data:', error));
   }, []);
 
-  // Group data by season and game week
   const seasons = d3.group(eloData, (d) => d.Season_End_Year);
 
+  // Function to handle dragging
+  const handleDragging = (e) => {
+    if (!isDragging.current) return;
+
+    e.preventDefault();
+    const x = e.pageX - conveyorRef.current.offsetLeft;
+    const walk = (x - startX.current) * 2; // Increase walk for faster scroll
+    conveyorRef.current.scrollLeft = scrollLeft.current - walk;
+
+    updateFocusClass(); // Dynamically update the focus class during dragging
+  };
+
+  const startDragging = (e) => {
+    isDragging.current = true;
+    startX.current = e.pageX - conveyorRef.current.offsetLeft;
+    scrollLeft.current = conveyorRef.current.scrollLeft;
+  };
+
+  const stopDragging = () => {
+    isDragging.current = false;
+  };
+
+  // Function to update the "focus" class
+  const updateFocusClass = () => {
+    const conveyor = conveyorRef.current;
+    const conveyorCenter = conveyor.offsetWidth / 2; // Center point of the conveyor
+    const buttons = conveyor.querySelectorAll('.conveyor-item');
+    let closestIndex = null;
+    let minDistance = Infinity;
+
+    buttons.forEach((button, index) => {
+      const buttonCenter = button.offsetLeft + button.offsetWidth / 2;
+      const distance = Math.abs(buttonCenter - (conveyor.scrollLeft + conveyorCenter));
+
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestIndex = index;
+      }
+    });
+
+    setFocusedIndex(closestIndex); // Set the closest button to the center as focused
+  };
+
   const handleSeasonClick = (season) => {
-    setSelectedSeason(selectedSeason === season ? null : season); // Toggle season display
+    setSelectedSeason(season === selectedSeason ? null : season); // Toggle season display
+  };
+
+  const handleMouseMove = (e, season) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const rotateX = (y / rect.height - 0.5) * 50; // Reduced parallax effect for subtle movement
+    const rotateY = (x / rect.width - 0.5) * -50;
+
+    e.currentTarget.querySelector('.season-square-content').style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+  };
+
+  const handleMouseLeave = (e) => {
+    e.currentTarget.querySelector('.season-square-content').style.transform = 'rotateX(0deg) rotateY(0deg)'; // Reset when mouse leaves
   };
 
   return (
     <div className="elo-table-container">
       <h2>Premier League ELO Ratings - Full Table</h2>
-      <div className="table-wrapper">
-        {Array.from(seasons.keys()).map((season) => (
-          <div key={season} className="season-section">
-            <button className="season-button" onClick={() => handleSeasonClick(season)}>
-              {season}
-            </button>
-            {selectedSeason === season && (
-              <div className="matches-by-week">
-                {Array.from(d3.group(seasons.get(season), (d) => d.Week).entries()).map(
-                  ([week, matches]) => (
-                    <div key={week} className="week-section">
-                      <h3>Game Week {week}</h3>
-                      <div className="matches">
-                        {matches.map((match, index) => (
-                          <MatchRow key={index} match={match} />
-                        ))}
-                      </div>
-                    </div>
-                  )
-                )}
+
+      {/* Conveyor belt container */}
+      <div
+        className="conveyor-container"
+        ref={conveyorRef}
+        onMouseDown={startDragging} // Start drag on mouse down
+        onMouseMove={handleDragging} // Drag on mouse move
+        onMouseUp={stopDragging} // Stop dragging on mouse up
+        onMouseLeave={stopDragging} // Stop dragging if the mouse leaves the area
+      >
+        <div className="conveyor-track">
+          {Array.from(seasons.keys()).map((season, index) => (
+            <button
+              key={season}
+              className={`season-square conveyor-item ${index === focusedIndex ? 'focus' : ''}`}
+              onClick={() => handleSeasonClick(season)}
+              onMouseMove={(e) => handleMouseMove(e, season)} // Parallax effect on mouse move
+              onMouseLeave={handleMouseLeave} // Reset parallax effect when mouse leaves
+            >
+              <div className="season-square-content">
+                {season}
               </div>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Slide-up section to show matches when a season is selected */}
+      {selectedSeason && (
+        <div className="slide-up-section">
+          <button className="close-button" onClick={() => setSelectedSeason(null)}>
+            V
+          </button>
+
+          {/* Game week navigation buttons */}
+          <div className="game-week-buttons">
+            {Array.from(d3.group(seasons.get(selectedSeason), (d) => d.Week).keys()).map((week) => (
+              <button
+                key={week}
+                className="week-button"
+                onClick={() => handleWeekButtonClick(week)}
+              >
+                Week {week}
+              </button>
+            ))}
+          </div>
+
+          <h3>Season {selectedSeason}</h3>
+          <div className="matches-by-week">
+            {Array.from(d3.group(seasons.get(selectedSeason), (d) => d.Week).entries()).map(
+              ([week, matches]) => (
+                <div key={week} className="week-section">
+                  <h3>Game Week {week}</h3>
+                  <div className="matches">
+                    {matches.map((match, index) => (
+                      <MatchRow key={index} match={match} />
+                    ))}
+                  </div>
+                </div>
+              )
             )}
           </div>
-        ))}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -81,47 +180,26 @@ const MatchRow = ({ match }) => {
 
   return (
     <div className="match-row">
-      {/* Home Team ELO Change */}
       <div className={`elo-change-home ${getColorForEloChange(match.Home_ELO_Change)}`}>
         {match.Home_ELO_Change}
       </div>
-
-      {/* Home Team ELO */}
       <div className="elo-value-home">{match.Home_ELO_New}</div>
-
-      {/* Home Team Logo */}
       <div className="logo-home">
         <img src={`/Teams Logos/${match.Home_Team}_Logo.svg`} alt={`${match.Home_Team} Logo`} />
       </div>
-
-      {/* Home Team Name */}
       <div className="team-name-home">{match.Home_Team}</div>
-
-      {/* Home Team Goals */}
       <div className={`goals-home ${getColorForGoals(match.HomeGoals, match.AwayGoals)}`}>
         {match.HomeGoals}
       </div>
-
-      {/* Match Date */}
       <div className="match-date">{match.Date}</div>
-
-      {/* Away Team Goals */}
       <div className={`goals-away ${getColorForGoals(match.AwayGoals, match.HomeGoals)}`}>
         {match.AwayGoals}
       </div>
-
-      {/* Away Team Name */}
       <div className="team-name-away">{match.Away_Team}</div>
-
-      {/* Away Team Logo */}
       <div className="logo-away">
         <img src={`/Teams Logos/${match.Away_Team}_Logo.svg`} alt={`${match.Away_Team} Logo`} />
       </div>
-
-      {/* Away Team ELO */}
       <div className="elo-value-away">{match.Away_ELO_New}</div>
-
-      {/* Away Team ELO Change */}
       <div className={`elo-change-away ${getColorForEloChange(match.Away_ELO_Change)}`}>
         {match.Away_ELO_Change}
       </div>

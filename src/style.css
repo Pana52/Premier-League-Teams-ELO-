@@ -2,7 +2,6 @@
 /*===============================================================================================*/
 h1, h2, h3, h4, h5, h6 {
     font-family: "Oswald", sans-serif;
-    color: black;
 }
 
 p {
@@ -18,10 +17,18 @@ body {
 }
 
 header {
-    background-color: #444;
+    background-color: #000000;
     color: #fff;
     padding: 10px 0;
     text-align: center;
+}
+
+#navbar {
+    position: fixed;
+    max-height: 20vh;
+    width: 100%;
+    top: 0;
+    z-index: 999;
 }
 
 nav ul {
@@ -53,8 +60,8 @@ nav ul li a:hover {
 section {
     margin: 20px;
     padding: 20px;
-    background: #fff;
-    border-radius: 10px;
+    background: transparent;
+    border-radius: 0px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     overflow: hidden; /* To contain any overflowing content */
 }
@@ -86,3 +93,7 @@ section {
     background-color: #555;
 }
 /*===============================================================================================*/
+
+#ELO {
+    background-color: #0000001e;
+}
