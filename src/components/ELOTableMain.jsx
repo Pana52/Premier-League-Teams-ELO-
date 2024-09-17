@@ -11,16 +11,20 @@ const ELOTableMain = () => {
   const startX = useRef(0); // Store the starting X position of the mouse when dragging starts
   const scrollLeft = useRef(0); // Store the initial scroll position when dragging starts
 
+  // Track the selected week
+  const [selectedWeek, setSelectedWeek] = useState(null);
+
+  // Fetch the ELO data from the API
   useEffect(() => {
-    fetch('/ELO_Ratings_Log.csv')
-      .then((response) => response.text())
+    fetch('/api/elo-data')
+      .then((response) => response.json())
       .then((data) => {
-        const parsedData = d3.csvParse(data, (d) => ({
+        const parsedData = data.map((d) => ({
           ...d,
-          Home_ELO_New: Math.round(+d.Home_ELO_New),
-          Home_ELO_Change: Math.round(+d.Home_ELO_Change),
-          Away_ELO_New: Math.round(+d.Away_ELO_New),
-          Away_ELO_Change: Math.round(+d.Away_ELO_Change),
+          Home_ELO_New: Math.round(d.Home_ELO_New),
+          Home_ELO_Change: Math.round(d.Home_ELO_Change),
+          Away_ELO_New: Math.round(d.Away_ELO_New),
+          Away_ELO_Change: Math.round(d.Away_ELO_Change),
           HomeGoals: +d.HomeGoals,
           AwayGoals: +d.AwayGoals,
         }));
@@ -29,8 +33,9 @@ const ELOTableMain = () => {
       .catch((error) => console.error('Error loading ELO data:', error));
   }, []);
 
+  // Group the data by season
   const seasons = d3.group(eloData, (d) => d.Season_End_Year);
-
+  
   // Function to handle dragging
   const handleDragging = (e) => {
     if (!isDragging.current) return;
@@ -74,10 +79,23 @@ const ELOTableMain = () => {
     setFocusedIndex(closestIndex); // Set the closest button to the center as focused
   };
 
+  // Function to handle selecting a season
   const handleSeasonClick = (season) => {
     setSelectedSeason(season === selectedSeason ? null : season); // Toggle season display
   };
 
+  // Function to handle scrolling to the selected week
+  const handleWeekButtonClick = (week) => {
+    setSelectedWeek(week); // Update the selected week
+
+    // Scroll to the corresponding week section
+    const weekSection = document.getElementById(`week-${week}`);
+    if (weekSection) {
+      weekSection.scrollIntoView({ behavior: 'smooth' }); // Scroll smoothly to the week section
+    }
+  };
+
+  // Mouse movement for parallax effect on season buttons
   const handleMouseMove = (e, season) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -106,21 +124,25 @@ const ELOTableMain = () => {
         onMouseUp={stopDragging} // Stop dragging on mouse up
         onMouseLeave={stopDragging} // Stop dragging if the mouse leaves the area
       >
-        <div className="conveyor-track">
-          {Array.from(seasons.keys()).map((season, index) => (
-            <button
-              key={season}
-              className={`season-square conveyor-item ${index === focusedIndex ? 'focus' : ''}`}
-              onClick={() => handleSeasonClick(season)}
-              onMouseMove={(e) => handleMouseMove(e, season)} // Parallax effect on mouse move
-              onMouseLeave={handleMouseLeave} // Reset parallax effect when mouse leaves
-            >
-              <div className="season-square-content">
-                {season}
-              </div>
-            </button>
-          ))}
-        </div>
+        {seasons.size > 0 ? (
+          <div className="conveyor-track">
+            {Array.from(seasons.keys()).map((season, index) => (
+              <button
+                key={season}
+                className={`season-square conveyor-item ${index === focusedIndex ? 'focus' : ''}`}
+                onClick={() => handleSeasonClick(season)}
+                onMouseMove={(e) => handleMouseMove(e, season)}
+                onMouseLeave={handleMouseLeave}
+              >
+                <div className="season-square-content">
+                  {season}
+                </div>
+              </button>
+            ))}
+          </div>
+        ) : (
+          <p>No seasons available or data not loaded</p>
+        )}
       </div>
 
       {/* Slide-up section to show matches when a season is selected */}
@@ -147,7 +169,7 @@ const ELOTableMain = () => {
           <div className="matches-by-week">
             {Array.from(d3.group(seasons.get(selectedSeason), (d) => d.Week).entries()).map(
               ([week, matches]) => (
-                <div key={week} className="week-section">
+                <div key={week} className="week-section" id={`week-${week}`}> {/* Add ID to week sections */}
                   <h3>Game Week {week}</h3>
                   <div className="matches">
                     {matches.map((match, index) => (

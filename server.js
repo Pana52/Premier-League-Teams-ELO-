@@ -1,8 +1,42 @@
 require('dotenv').config(); // Load environment variables
 const express = require('express');
 const path = require('path');
+const mongoose = require('mongoose');
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// MongoDB connection setup
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log('Connected to MongoDB'))
+  .catch((error) => console.error('Error connecting to MongoDB:', error));
+
+// Define ELO match schema and model
+const eloMatchSchema = new mongoose.Schema({
+  Season_End_Year: String,
+  Week: String,
+  Date: String,
+  Home_ELO_New: Number,
+  Home_ELO_Change: Number,
+  Home_Team: String,
+  HomeGoals: Number,
+  AwayGoals: Number,
+  Away_Team: String,
+  Away_ELO_New: Number,
+  Away_ELO_Change: Number,
+});
+
+const ELOMatch = mongoose.model('ELOMatch', eloMatchSchema, process.env.COLLECTION_NAME_STATS);
+
+// Create a route to retrieve ELO match data from MongoDB
+app.get('/api/elo-data', async (req, res) => {
+  try {
+    const eloData = await ELOMatch.find();
+    res.json(eloData);
+  } catch (error) {
+    console.error('Error fetching ELO data:', error);
+    res.status(500).send('Server error');
+  }
+});
 
 // Use dynamic import for node-fetch
 async function fetchModule() {
