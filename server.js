@@ -38,6 +38,41 @@ app.get('/api/elo-data', async (req, res) => {
   }
 });
 
+
+// Define Premier League Table schema and model
+const premierLeagueTableSchema = new mongoose.Schema({
+  Position: String,
+  Club: String,
+  Played: Number,
+  Won: Number,
+  Drawn: Number,
+  Lost: Number,
+  GF: Number,
+  GA: Number,
+  GD: Number,
+  Points: Number,
+  Season: Number,
+});
+
+const PremierLeagueTable = mongoose.model('PremierLeagueTable', premierLeagueTableSchema, process.env.COLLECTION_NAME_TABLES);
+
+// Create a route to retrieve Premier League table data from MongoDB
+app.get('/api/premier-league-table', async (req, res) => {
+  const season = req.query.season;
+  
+  if (!season) {
+    return res.status(400).send('Season is required');
+  }
+
+  try {
+    const tableData = await PremierLeagueTable.find({ Season: season }).sort({ Position: 1 });
+    res.json(tableData);
+  } catch (error) {
+    console.error('Error fetching Premier League table data:', error);
+    res.status(500).send('Server error');
+  }
+});
+
 // Use dynamic import for node-fetch
 async function fetchModule() {
   const fetch = await import('node-fetch');  // Dynamically import node-fetch

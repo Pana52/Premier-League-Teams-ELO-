@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import './ELOTableMain.css';
+import PremierLeagueTable from './PremierLeagueTable';
 
 const ELOTableMain = () => {
   const [eloData, setEloData] = useState([]);
@@ -144,15 +145,23 @@ const ELOTableMain = () => {
           <p>No seasons available or data not loaded</p>
         )}
       </div>
-
-      {/* Slide-up section to show matches when a season is selected */}
       {selectedSeason && (
         <div className="slide-up-section">
           <button className="close-button" onClick={() => setSelectedSeason(null)}>
             V
           </button>
 
-          {/* Game week navigation buttons */}
+          <div className="content-container">
+            {/* Left side: Image */}
+            <div className="image-container">
+              <img src={`/Images/Season_${selectedSeason}_Image.png`} alt={`Season ${selectedSeason}`} />
+            </div>
+
+            {/* Right side: Premier League Table */}
+            <PremierLeagueTable season={selectedSeason} />
+          </div>
+
+          {/* Game week navigation and matches go below */}
           <div className="game-week-buttons">
             {Array.from(d3.group(seasons.get(selectedSeason), (d) => d.Week).keys()).map((week) => (
               <button
@@ -169,7 +178,7 @@ const ELOTableMain = () => {
           <div className="matches-by-week">
             {Array.from(d3.group(seasons.get(selectedSeason), (d) => d.Week).entries()).map(
               ([week, matches]) => (
-                <div key={week} className="week-section" id={`week-${week}`}> {/* Add ID to week sections */}
+                <div key={week} className="week-section" id={`week-${week}`}>
                   <h3>Game Week {week}</h3>
                   <div className="matches">
                     {matches.map((match, index) => (

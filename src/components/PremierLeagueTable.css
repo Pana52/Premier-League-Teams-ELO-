@@ -1,0 +1,73 @@
+/* Premier League Table Container */
+.premier-league-table {
+    width: 50%;
+    padding: 20px;
+    background-color: #f9f9f9; /* Light background for contrast */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    border-radius: 8px; /* Rounded corners */
+    font-family: 'Roboto', sans-serif; /* Modern font */
+  }
+  
+  /* Table Styling */
+  .premier-league-table table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden; /* Clip table edges for smooth corner */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Soft shadow for table */
+  }
+  
+  /* Table Header Styling */
+  .premier-league-table th {
+    background-color: #333; /* Dark header background */
+    color: white; /* White text for contrast */
+    text-align: left;
+    padding: 12px 15px;
+    text-transform: uppercase; /* Make header text uppercase for emphasis */
+    font-weight: 500;
+  }
+  
+  /* Table Row Styling */
+  .premier-league-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e0e0e0; /* Light border between rows */
+    color: #333; /* Dark text */
+  }
+  
+  /* Alternate Row Colors */
+  .premier-league-table tr:nth-child(even) {
+    background-color: #f2f2f2; /* Light grey for alternate rows */
+  }
+  
+  /* Hover Effect for Rows */
+  .premier-league-table tr:hover {
+    background-color: #e0e0e0; /* Slightly darker grey on hover */
+  }
+  
+  /* Highlight Important Columns */
+  .premier-league-table td:nth-child(2) { /* Club column */
+    font-weight: 600;
+    color: #333; /* Darker text */
+  }
+  
+  .premier-league-table td:nth-child(10) { /* Points column */
+    font-weight: bold;
+    color: #007bff; /* Highlight points in blue */
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .premier-league-table {
+      width: 100%; /* Make table full-width on smaller screens */
+    }
+  
+    .premier-league-table table {
+      font-size: 14px; /* Reduce font size on smaller screens */
+    }
+  
+    .premier-league-table th, .premier-league-table td {
+      padding: 8px 10px; /* Adjust padding for smaller screens */
+    }
+  }
+  
